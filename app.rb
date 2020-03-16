@@ -4,7 +4,8 @@ require "sinatra/reloader" if development?                                      
 require "sequel"                                                                      #
 require "logger"                                                                      #
 require "twilio-ruby"                                                                 #
-require "bcrypt"                                                                      #
+require "bcrypt"
+require "geocoder"                                                                      #
 connection_string = ENV['DATABASE_URL'] || "sqlite://#{Dir.pwd}/development.sqlite3"  #
 DB ||= Sequel.connect(connection_string)                                              #
 DB.loggers << Logger.new($stdout) unless DB.loggers.size > 0                          #
@@ -17,6 +18,7 @@ after { puts; }                                                                 
 trips_table = DB.from(:trips)
 reviews_table = DB.from(:reviews)
 users_table = DB.from(:users)
+
 
 before do
     @current_user = users_table.where(id: session["user_id"]).to_a[0]
@@ -38,7 +40,29 @@ get "/trips/:id" do
     @trip = trips_table.where(id: params[:id]).to_a[0]
     @reviews = reviews_table.where(trip_id: @trip[:id]).to_a
     @review_count = reviews_table.where(trip_id: @trip[:id]).count #check this out later
+
+    @results = Geocoder.search(@trip[:title])
+    @lat_long = @results.first.coordinates # => [lat, long]
+    @coordinates = "#{@lat_long[0]} #{@lat_long[1]}"
+    
+
     view "trip"
+end
+
+# sign up to get text updates
+get "/trips/:id/SMS" do
+    puts "params: #{params}"
+
+       account_sid = ENV["TWILIO_ACCOUNT_SID"]
+       auth_token = ENV["TWILIO_AUTH_TOKEN"]
+       client = Twilio::REST::Client.new(account_sid, auth_token)
+       client.messages.create(
+       from: "+14243487854",
+       to: "+14107036254",
+       body: "Thanks for signing up to receive updates for this KWEST")
+
+    @trip = trips_table.where(id: params[:id]).to_a[0]
+    view "text_signup"
 end
 
 # display the review form (aka "new")
@@ -115,6 +139,7 @@ post "/users/create" do
 
     users_table.insert(
         name: params["name"],
+        phonenum: params["phonenum"],
         email: params["email"],
         password: BCrypt::Password.create(params["password"])
     )

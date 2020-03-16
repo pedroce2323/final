@@ -23,8 +23,10 @@ end
 DB.create_table! :users do
   primary_key :id
   String :name
+  Integer :phonenum
   String :email
   String :password
+  
 end
 
 # Insert initial (seed) data
@@ -35,9 +37,14 @@ trips_table.insert(title: "Jamaica",
                     date: "August 22-29",
                     location: "Montego Bay, Ocho Rios, Negril")
 
-trips_table.insert(title: "South of France", 
+trips_table.insert(title: "French Riviera", 
                     description: "Baguettes, Cheese, Vinyards, and good times in one of the most beautiful places on Earth",
                     date: "August 21-28",
                     location: "Nice, Cannes")
+
+trips_table.insert(title: "Hawaii", 
+                    description: "Get your snorkles ready!!! On KWEST Hawaii, you only eat what you catch",
+                    date: "August 21-26",
+                    location: "Honolulu, Maui")
 
 puts "success!"
