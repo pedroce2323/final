@@ -107,13 +107,16 @@ post "/reviews/:id/update" do
     # find relevant event based on review trip_id
     @trip = trips_table.where(id: @review[:trip_id]).to_a[0]
     # next we want to update reviews table with the review edited data
-    reviews_table.where(id: params["id"]).update(
-        year: params["year"],
-        rating: params["rating"],
-        comments: params["comments"]
-    )
-
+    if @current_user && @current_user[:id] == review[:id]
+        reviews_table.where(id: params["id"]).update(
+            year: params["year"],
+            rating: params["rating"],
+            comments: params["comments"]
+        )
     view "update_review"
+    else
+        view "error"
+    end
 end
 
 # delete a review (aka "destroy")
@@ -136,7 +139,11 @@ end
 # receive the submitted signup form (aka "create")
 post "/users/create" do
     puts "params: #{params}"
-
+    
+    existing_user = users_table.where(email: params["email"]).to_a[0]
+    if existing_user
+        view "error"
+    else    
     users_table.insert(
         name: params["name"],
         phonenum: params["phonenum"],
@@ -144,6 +151,7 @@ post "/users/create" do
         password: BCrypt::Password.create(params["password"])
     )
     view "create_user"
+    end
 end
 
 # display the login form (aka "new")
