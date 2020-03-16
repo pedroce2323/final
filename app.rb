@@ -107,7 +107,7 @@ post "/reviews/:id/update" do
     # find relevant event based on review trip_id
     @trip = trips_table.where(id: @review[:trip_id]).to_a[0]
     # next we want to update reviews table with the review edited data
-    if @current_user && @current_user[:id] == review[:id]
+    if @current_user && @current_user[:id] == @review[:user_id]
         reviews_table.where(id: params["id"]).update(
             year: params["year"],
             rating: params["rating"],
