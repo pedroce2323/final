@@ -28,6 +28,7 @@
                         <%= @users_table.where(id: review[:user_id]).to_a[0][:name] %>
 
                         <small>
+                        <% if @current_user[:id] == review[:user_id] %>
                             (<a href="/reviews/<%= review[:id] %>/edit">edit</a> | <a href="/reviews/<%= review[:id] %>/destroy">delete</a>)
                         </small>
                     </h5>
