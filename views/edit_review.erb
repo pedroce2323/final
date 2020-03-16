@@ -1,0 +1,32 @@
+<h2>
+    <i class="far fa-calendar-alt"></i>
+    <%= @trip[:date] %>
+</h2>
+<h1>Leave a Review for KWEST <%= @trip[:title] %></h1>
+
+<form action="/reviews/<%= @review[:id] %>/update" method="post">
+<div class="form-group">
+    <label>Which year did you go on this trip?</label>
+    <input type="text" class="form-control" name="year" value="<%= @review[:year] %>">
+  </div>
+
+   <div class="form-group">
+    <label>What is your overall rating for this trip?</label>
+    <select class="form-control" name="rating">
+      <option value="5">A</option>
+      <option value="4">B</option>
+      <option value="3">C</option>
+      <option value="2">D</option>
+      <option value="1">E</option>
+    </select>
+  </div>
+
+
+
+
+  <div class="form-group">
+    <label>Comments</label>
+    <textarea class="form-control" rows="3" name="comments"><%= @review[:comments] %></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

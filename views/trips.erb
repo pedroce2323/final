@@ -1,0 +1,5 @@
+<h1>KWEST Locations</h1>
+
+<% for trip in @trips %>
+    <p><a href="/trips/<%= trip[:id] %>"><%= trip[:title] %></a></p>
+<% end %>
