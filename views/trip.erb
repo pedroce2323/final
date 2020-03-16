@@ -30,7 +30,8 @@
                         <small>
                         <% if @current_user[:id] == review[:user_id] %>
                             (<a href="/reviews/<%= review[:id] %>/edit">edit</a> | <a href="/reviews/<%= review[:id] %>/destroy">delete</a>)
-                        </small>
+                        <% end %>
+                            </small>
                     </h5>
                     <%= review[:comments] %>
                     (<%= review[:year] %>)
