@@ -59,7 +59,7 @@ get "/trips/:id/SMS" do
        client.messages.create(
        from: "+14243487854",
        to: "+14107036254",
-       body: "Thanks for signing up to receive updates for this KWEST")
+       body: "Thanks for signing up to receive KWEST updates")
 
     @trip = trips_table.where(id: params[:id]).to_a[0]
     view "text_signup"
