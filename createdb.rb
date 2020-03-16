@@ -23,7 +23,7 @@ end
 DB.create_table! :users do
   primary_key :id
   String :name
-  Integer :phonenum
+  String :phonenum
   String :email
   String :password
   
